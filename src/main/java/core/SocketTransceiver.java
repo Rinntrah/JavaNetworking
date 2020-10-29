@@ -205,10 +205,6 @@ public class SocketTransceiver {
         return m;
     }
 
-    protected void run() {
-        readerThread = new Thread(readerRunnable);
-        readerThread.start();
-    }
 
     public synchronized boolean send(Collection<AbstractNetMessage> toSend) {
         for (AbstractNetMessage msg : toSend) {
@@ -275,6 +271,10 @@ public class SocketTransceiver {
         out.write(PrimitiveToByteConversionUtils.convertIntToByteArray(dataCompressed.length));
         //step 3. write data byte array
         out.write(dataCompressed);
+    }
+    protected void run() {
+        readerThread = new Thread(readerRunnable);
+        readerThread.start();
     }
 
 }

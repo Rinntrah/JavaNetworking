@@ -20,11 +20,6 @@ import java.util.logging.Logger;
  */
 public class Server {
 
-    /*
-     * A value in milliseconds used to specify how often to check for received messages
-     * from clients.
-     */
-    private long serverLoopIntervalInMilliseconds = 16;
 
     private ConcurrentLinkedQueue<ClientConnection> activeConnections;
     private OnClientConnectedListener onClientConnectedListener;
@@ -32,6 +27,11 @@ public class Server {
     private OnClientMessageListener onClientMessageListener;
     private Thread serverIncomingConnectionAcceptorThread;
     private volatile boolean serverIncomingConnectionAcceptorThreadRunning = false;
+    /*
+     * A value in milliseconds used to specify how often to check for received messages
+     * from clients.
+     */
+    private long serverLoopIntervalInMilliseconds = 16;
     private Thread serverMessageReceiverThread;
     private volatile boolean serverMessageReceiverThreadRunning = false;
     private volatile boolean serverRunning;
