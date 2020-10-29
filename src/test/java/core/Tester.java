@@ -68,8 +68,9 @@ public class Tester {
             Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        final SocketTransceiver st = new SocketTransceiver(MyTestMessageRegisterSingleton.getSingleton());
-        boolean connected = st.tryConnect(hostName, portNumber);
+        Client client = new Client(hostName, portNumber, MyTestMessageRegisterSingleton.getSingleton());
+
+        boolean connected = client.connect();
         Assert.assertEquals(connected, true);
 
         if (connected) {
@@ -81,13 +82,13 @@ public class Tester {
 
                 final List<AbstractNetMessage> toSend = new ArrayList<AbstractNetMessage>();
                 toSend.add(stringMessage);
-                if (!st.send(toSend)) {
+                if (!client.sendMessages(toSend)) {
                     break;
                 }
 
                 //Get some messages if available
-                if (st.getReceivedMessages().size() > 0) {
-                    ConcurrentLinkedQueue<AbstractNetMessage> receivedMessages = st.getReceivedMessages();
+                ConcurrentLinkedQueue<AbstractNetMessage> receivedMessages = client.getMessages();
+                if (receivedMessages.size() > 0) {
                     for (Iterator<AbstractNetMessage> iterator = receivedMessages.iterator(); iterator.hasNext();) {
                         AbstractNetMessage next = iterator.next();
                         System.err.println("[CLIENT] RECEIVED MESSAGE->" + next);
@@ -103,7 +104,7 @@ public class Tester {
         }
 
         System.err.println("[CLIENT] DISCONNECTING FROM SERVER...");
-        st.disconnect();
+        client.disconnect();
     }
 
     private void stopServer() {
